@@ -20,8 +20,10 @@ return new class extends Migration
             $table->foreignId("user_id")
             ->constrained("users")
             ->cascadeOnDelete();
+            $table->softDeletes();
+            $table->timestamp("read_at")->nullable();
+            $table->primary("message_id","user_id");
 
-            $table->timestamps();
         });
     }
 

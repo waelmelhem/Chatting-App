@@ -6,9 +6,10 @@ use Error;
 use Throwable;
 use App\Models\User;
 use App\Models\Recipient;
-use App\Models\Conversation;
 use App\Models\Participant;
+use App\Models\Conversation;
 use Illuminate\Http\Request;
+use App\Events\MessageCreate;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -95,6 +96,7 @@ class MessagesController extends Controller
             $conversation->update([
                 "last_message_id"=>$message->id,
             ]);
+            broadcast(new MessageCreate($message));
             return $message;
         }catch(Throwable $e){
             DB::rollBack();

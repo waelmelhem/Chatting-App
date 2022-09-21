@@ -8,24 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 class Conversation extends Model
 {
     protected $fillable=[
-        "user_id","label","last_message_id"
+        "user_id","label","last_message_id","type",
     ];
     public function participants(){
         return $this->belongsToMany(User::class,"participants")
         ->withPivot([
             "joined_at","role"
         ]);
-    };
+    }
     public function messages(){
-        return $this->hasMany(Messages::class)
+        return $this->hasMany(Message::class)
         ->latest();
-    };
+    }
     public function user(){
         return $this->belongsTo(User::class);
-    };
+    }
     public function  last_message(){
         return $this->hasOne(Message::class,"last_message_id","id")
         ->withDefault("no sented message yet");
     }
-     
+
 }

@@ -17,14 +17,13 @@ class Conversation extends Model
         ]);
     }
     public function messages(){
-        return $this->hasMany(Message::class)
-        ->latest();
+        return $this->hasMany(Message::class);
     }
     public function user(){
         return $this->belongsTo(User::class);
     }
     public function  last_message(){
-        return $this->hasOne(Message::class,"last_message_id","id")
+        return $this->hasOne(Message::class,"id","last_message_id")
         ->withDefault("no sented message yet");
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MessengerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/{id?}',[MessengerController::class,"index"])->middleware(['auth'])->name("messenger");
+
+Route::get('/dashboard', function () {
+    return view('');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';

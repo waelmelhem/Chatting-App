@@ -56,35 +56,35 @@ class MessagesController extends Controller
         ]);
         $conversation_id=$request->post("conversation_id");
         $user_id=$request->post("user_id");
-        $user=User::find(1);
+        $user=User::find(5);
         Db::beginTransaction();
         try{
             if($conversation_id){
                 $conversation=$user->conversations()->findOrFail($conversation_id);
             }
             else{
-                $conversation= Conversation::where("type","=","peer")
+                $conversation= Conversation::where("type","peer")
                     ->whereHas("participants",function(Builder $query) use($user,$user_id){
                         $query->join("participants as participants2","participants2.conversation_id","=","participants.conversation_id")
                         ->where("participants2.user_id","=",$user_id)
-                        ->where("participants2.user_id","=",$user->id);
+                        ->where("participants.user_id","=",$user->id);
                 })->first();
                 if(!$conversation){
                     $conversation = Conversation::create([
                         "user_id"=>$user->id
                     ]);
+                    $conversation->participants()->attach([
+                        $user_id=>["joined_at"=>now()],
+                        $user->id=>["joined_at"=>now()]
+                    ]);
                 }
-                $conversation->participants()->attach([
-                    $user_id=>["joined_at"=>now()],
-                    $user->id=>["joined_at"=>now()]
-                ]);
-                
             }
-            
+            // return 1;
             $message=$conversation->messages()->create([
                 "user_id"=>$user->id,
                 "body"=>$request->post("message"),
             ]);
+            
             DB::statement(
                 "
                 insert into recipients (user_id,message_id)

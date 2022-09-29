@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Conversation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,12 +27,19 @@ class MessengerController extends Controller
         if(!isset($messages)){
             $messages=$chats->first();
         }
-        $messages=$messages->messages()->with("user")->get();;
-        // return $messages;
+        $current1=($messages);
+        if(!$current1)$current1=new Conversation();
+        else{
+            $current1=$current1->first();
+        }
+        $messages=$messages===null?[]:$messages->messages()->with("user")->get();;
+        // return $current1->id;
+
         return view("messenger",[
             "friendes"=>$friendes,
             "chats"=>$chats,
-            "messages"=>$messages
+            "messages"=>$messages,
+            "current1"=>$current1->id,
         ]);
     }
 }

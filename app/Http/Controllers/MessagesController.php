@@ -38,6 +38,7 @@ class MessagesController extends Controller
      */
     public function store(Request $request)
     {
+        
         $request->validate([
             "message"=>["required","string"],
             "conversation_id"=>[
@@ -54,9 +55,11 @@ class MessagesController extends Controller
                 "exists:users,id"
             ],
         ]);
+        
         $conversation_id=$request->post("conversation_id");
         $user_id=$request->post("user_id");
-        $user=User::find(5);
+        $user=Auth::user();
+        
         Db::beginTransaction();
         try{
             if($conversation_id){
@@ -79,6 +82,7 @@ class MessagesController extends Controller
                     ]);
                 }
             }
+            
             // return 1;
             $message=$conversation->messages()->create([
                 "user_id"=>$user->id,

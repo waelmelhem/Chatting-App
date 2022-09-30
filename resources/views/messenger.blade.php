@@ -946,7 +946,7 @@
                                 </div>
 
                                 <!-- Chats -->
-                                <div class="card-list">
+                                <div class="card-list" id="card-list">
                                     {{-- <!-- Card -->
                                         <a href="chat-group.html" class="card border-0 text-reset">
                                             <div class="card-body">
@@ -1011,44 +1011,6 @@
                                             </div><!-- .card-footer -->
                                         </a>
                                         <!-- Card --> --}}
-                                    @foreach ($chats as $chat)
-                                        <!-- Card -->
-                                        <a href="{{ route('messenger', $chat->id) }}"
-                                            class="card border-0 text-reset">
-                                            <div class="card-body">
-                                                <div class="row gx-5">
-                                                    <div class="col-auto">
-                                                        <div class="avatar avatar-online">
-                                                            <span
-                                                                class="avatar-text">{{ $chat->participants[0]->name[0] }}</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col">
-                                                        <div class="d-flex align-items-center mb-3">
-                                                            <h5 class="me-auto mb-0">
-                                                                {{ $chat->participants[0]->name }}</h5>
-                                                            <span
-                                                                class="text-muted extra-small ms-2">{{ $chat->last_message->created_at->diffForHumans() }}</span>
-                                                        </div>
-
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="line-clamp me-auto">
-                                                                {{ Str::words($chat->last_message->body, 20) }}
-                                                            </div>
-
-                                                            <div class="badge badge-circle bg-primary ms-5">
-                                                                <span>3</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div><!-- .card-body -->
-                                        </a>
-                                        <!-- Card -->
-                                    @endforeach
-
-
                                     {{-- <!-- Card -->
                                         <a href="chat-empty.html" class="card border-0 text-reset">
                                             <div class="card-body">
@@ -4536,6 +4498,7 @@
     </script>
     <script src="{{ asset('assets/js/vendor.js') }}"></script>
     <script src="{{ asset('assets/js/template.js') }}"></script>
+    <script src="{{ asset('assets/js/moment.js') }}"></script>
     <script src="{{ asset('assets/js/messenger.js') }}"></script>
     <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
     <script>

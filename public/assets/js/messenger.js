@@ -1,16 +1,16 @@
-$(".chat-form").on("submit",function(e){
-    
+$(".chat-form").on("submit", function (e) {
+
     e.preventDefault();
     // alert($(this).serialize());
-    $.post($(this).attr("action"),$(this).serialize(),function(response){
-        
+    $.post($(this).attr("action"), $(this).serialize(), function (response) {
+
     });
-    var msg=$(this).find("textarea").val();
-    appendMess(msg,"message-out");
+    var msg = $(this).find("textarea").val();
+    appendMess(msg, "message-out");
     $(this).find("textarea").val("");
-    
+
 })
-function appendMess(msg,clss){
+function appendMess(msg, clss) {
     $("#chat_body").append(`
 <div class="message ${clss}">
     <a href="#" data-bs-toggle="modal" data-bs-target="#modal-profile" class="avatar avatar-responsive">
@@ -70,5 +70,49 @@ function appendMess(msg,clss){
         </div>
     </div>
 </div>`);
-$("#chat_body").animate({ scrollDown: "100px" });
+    $("#chat_body").animate({ scrollDown: "100px" });
 }
+function getChats() {
+    $.get("api/conversations", function (response) {
+        for(i in response.data){
+            appendChat(response.data[i]);
+        }
+    });
+}
+function appendChat(chat) {
+    $("#card-list").append(`<a href="${chat.id}"
+    class="card border-0 text-reset">
+    <div class="card-body">
+        <div class="row gx-5">
+            <div class="col-auto">
+                <div class="avatar avatar-online">
+                <img style="border-radius: 50%;" src="${chat.participants[0].Avatars}"></img>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="d-flex align-items-center mb-3">
+                    <h5 class="me-auto mb-0">
+                        ${ chat.participants[0].name }</h5>
+                    <span
+                        class="text-muted extra-small ms-2">${moment(chat.last_message.created_at).fromNow() }</span>
+                </div>
+
+                <div class="d-flex align-items-center">
+                    <div class="line-clamp me-auto">
+                        ${chat.last_message.body}
+                    </div>
+
+                    <div class="badge badge-circle bg-primary ms-5">
+                        <span>3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- .card-body -->
+    </a>`)
+}
+
+$("body").ready(function(){
+    getChats();
+});

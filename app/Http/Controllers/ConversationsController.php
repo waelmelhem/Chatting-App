@@ -11,7 +11,10 @@ class ConversationsController extends Controller
 {
     public function index(){
         $user =Auth::user();
-        return $user->conversations()->paginate();
+        return $user->conversations()->with(["last_message",
+        "participants"=>function($builder)use ($user){
+            $builder->where("id","<>",$user->id);
+        }])->paginate();
     }
     public function show(Conversation $conversation)
     {

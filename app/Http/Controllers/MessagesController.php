@@ -27,7 +27,7 @@ class MessagesController extends Controller
         $user=User::find(1);
         // Auth::user();
         $conv=$user->conversations()->findOrFail($id);
-        return $conv->message()->paginate();
+        return $conv->message()->with("user")->paginate();
     }
 
     /**

@@ -41,6 +41,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    protected $appends=[
+        "Avatars"
+    ];
     public function conversations(){
         return $this->belongsToMany(Conversation::class,"participants")
         ->latest("last_message_id")
@@ -55,5 +58,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Message::class,"recipients")
         ->withPivot(["read_at","delated_at"]);
     }
-    
+    public function getAvatarsAttribute(){
+        return "https://ui-avatars.com/api/?name=".$this->name."&background=0D8ABC&color=fff";
+    }
 }
